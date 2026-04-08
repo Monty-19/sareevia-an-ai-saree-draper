@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { motion } from "framer-motion";
-import { Star, MessageCircle, CheckCircle2, Zap } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Star, MessageCircle, CheckCircle2, Zap, Check } from "lucide-react";
 
 const reviews = [
   { name: "Priya S.", rating: 5, text: "Amazing! The AI scan was so accurate. Found the perfect Banarasi for my wedding!", avatar: "PS" },
@@ -18,6 +18,14 @@ const resolvedIssues = [
 
 const FeedbackSection = () => {
   const [feedback, setFeedback] = useState("");
+  const [submitted, setSubmitted] = useState(false);
+
+  const handleSubmit = () => {
+    if (!feedback.trim()) return;
+    setSubmitted(true);
+    setFeedback("");
+    setTimeout(() => setSubmitted(false), 4000);
+  };
 
   return (
     <section id="feedback" className="py-24">
@@ -81,20 +89,55 @@ const FeedbackSection = () => {
             <h3 className="mb-4 flex items-center gap-2 font-display text-xl font-semibold">
               <MessageCircle className="text-primary" /> Share Your Feedback
             </h3>
-            <textarea
-              value={feedback}
-              onChange={(e) => setFeedback(e.target.value)}
-              placeholder="Tell us about your experience..."
-              rows={5}
-              className="w-full rounded-xl border border-border bg-background p-4 text-sm outline-none focus:border-primary"
-            />
-            <motion.button
-              whileHover={{ scale: 1.03 }}
-              whileTap={{ scale: 0.97 }}
-              className="mt-4 w-full rounded-full bg-primary py-3 font-body text-sm font-semibold text-primary-foreground shadow-rose"
-            >
-              Submit Feedback
-            </motion.button>
+
+            <AnimatePresence mode="wait">
+              {submitted ? (
+                <motion.div
+                  key="success"
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.8 }}
+                  className="flex flex-col items-center justify-center py-12"
+                >
+                  <motion.div
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    transition={{ type: "spring", stiffness: 200, delay: 0.1 }}
+                    className="flex h-20 w-20 items-center justify-center rounded-full bg-green-500"
+                  >
+                    <Check size={40} className="text-white" />
+                  </motion.div>
+                  <motion.p
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.3 }}
+                    className="mt-4 font-display text-xl font-semibold text-green-600"
+                  >
+                    Submitted Successfully!
+                  </motion.p>
+                  <p className="mt-1 text-sm text-muted-foreground">Thank you for your feedback</p>
+                </motion.div>
+              ) : (
+                <motion.div key="form" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+                  <textarea
+                    value={feedback}
+                    onChange={(e) => setFeedback(e.target.value)}
+                    placeholder="Tell us about your experience..."
+                    rows={5}
+                    className="w-full rounded-xl border border-border bg-background p-4 text-sm outline-none focus:border-primary"
+                  />
+                  <motion.button
+                    whileHover={{ scale: 1.03 }}
+                    whileTap={{ scale: 0.97 }}
+                    onClick={handleSubmit}
+                    disabled={!feedback.trim()}
+                    className="mt-4 w-full rounded-full bg-primary py-3 font-body text-sm font-semibold text-primary-foreground shadow-rose disabled:opacity-50"
+                  >
+                    Submit Feedback
+                  </motion.button>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
         </div>
       </div>
