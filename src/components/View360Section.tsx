@@ -1,14 +1,18 @@
 import { useState } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { RotateCcw, ImageIcon } from "lucide-react";
-import view360 from "@/assets/360-view.jpg";
+import bgStudio from "@/assets/360-view.jpg";
+import bgOffice from "@/assets/bg-office.jpg";
+import bgWedding from "@/assets/bg-wedding.jpg";
+import bgFunction from "@/assets/bg-function.jpg";
+import bgIndia from "@/assets/bg-india.jpg";
 
 const backgrounds = [
-  { name: "Studio", color: "bg-rose-soft" },
-  { name: "Wedding", color: "bg-gradient-to-b from-amber-50 to-rose-100" },
-  { name: "Office", color: "bg-gradient-to-b from-slate-100 to-slate-200" },
-  { name: "Function", color: "bg-gradient-to-b from-pink-50 to-purple-100" },
-  { name: "India Map", color: "bg-gradient-to-b from-orange-50 to-green-50" },
+  { name: "Studio", img: bgStudio },
+  { name: "Wedding", img: bgWedding },
+  { name: "Office", img: bgOffice },
+  { name: "Function", img: bgFunction },
+  { name: "India Map", img: bgIndia },
 ];
 
 const views = ["Front", "Right", "Back", "Left"];
@@ -16,7 +20,6 @@ const views = ["Front", "Right", "Back", "Left"];
 const View360Section = () => {
   const [bg, setBg] = useState(0);
   const [viewIdx, setViewIdx] = useState(0);
-  const [rotation, setRotation] = useState(0);
 
   return (
     <section id="360°-view" className="py-24 bg-secondary/30">
@@ -43,23 +46,28 @@ const View360Section = () => {
             viewport={{ once: true }}
             className="relative flex-1"
           >
-            <div className={`relative mx-auto max-w-md overflow-hidden rounded-3xl ${backgrounds[bg].color} p-8 transition-colors duration-500`}>
-              <motion.img
-                src={view360}
-                alt="360 degree saree view"
-                loading="lazy"
-                width={1024}
-                height={1024}
-                className="w-full rounded-2xl"
-                animate={{ rotateY: rotation }}
-                transition={{ type: "spring", stiffness: 100 }}
-              />
+            <div className="relative mx-auto max-w-md overflow-hidden rounded-3xl">
+              <AnimatePresence mode="wait">
+                <motion.img
+                  key={bg}
+                  src={backgrounds[bg].img}
+                  alt={`360 degree saree view - ${backgrounds[bg].name} background`}
+                  loading="lazy"
+                  width={1024}
+                  height={1024}
+                  className="w-full rounded-3xl"
+                  initial={{ opacity: 0, scale: 1.05 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.95 }}
+                  transition={{ duration: 0.5 }}
+                />
+              </AnimatePresence>
               <div className="absolute bottom-4 left-1/2 -translate-x-1/2">
                 <div className="flex gap-2 rounded-full bg-card/80 p-2 backdrop-blur">
                   {views.map((v, i) => (
                     <button
                       key={v}
-                      onClick={() => { setViewIdx(i); setRotation(i * 90); }}
+                      onClick={() => setViewIdx(i)}
                       className={`rounded-full px-3 py-1 text-xs font-medium transition ${viewIdx === i ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"}`}
                     >
                       {v}
