@@ -15,11 +15,8 @@ const backgrounds = [
   { name: "India Map", img: bgIndia },
 ];
 
-const views = ["Front", "Right", "Back", "Left"];
-
 const View360Section = () => {
   const [bg, setBg] = useState(0);
-  const [viewIdx, setViewIdx] = useState(0);
 
   return (
     <section id="360°-view" className="py-24 bg-secondary/30">
@@ -62,19 +59,6 @@ const View360Section = () => {
                   transition={{ duration: 0.5 }}
                 />
               </AnimatePresence>
-              <div className="absolute bottom-4 left-1/2 -translate-x-1/2">
-                <div className="flex gap-2 rounded-full bg-card/80 p-2 backdrop-blur">
-                  {views.map((v, i) => (
-                    <button
-                      key={v}
-                      onClick={() => setViewIdx(i)}
-                      className={`rounded-full px-3 py-1 text-xs font-medium transition ${viewIdx === i ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"}`}
-                    >
-                      {v}
-                    </button>
-                  ))}
-                </div>
-              </div>
             </div>
           </motion.div>
 
