@@ -9,12 +9,10 @@ import AncientIndiaSection from "@/components/AncientIndiaSection";
 import SecuritySection from "@/components/SecuritySection";
 import FeedbackSection from "@/components/FeedbackSection";
 import Footer from "@/components/Footer";
-import CustomCursor from "@/components/CustomCursor";
 import AIGuide from "@/components/AIGuide";
 
 const Index = () => (
   <>
-    <CustomCursor />
     <Navbar />
     <HeroSection />
     <AIScannerSection />
